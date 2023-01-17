@@ -1,6 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +17,18 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('tokens/create', [AuthController::class, 'tokenCreate']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group([
+    'middleware' => ['auth:sanctum'],
+    'as' => 'api'], function(){
+
+    Route::resources([
+        'articles' => ArticleController::class,
+        'categories' => CategoryController::class,
+        'comments' => CommentController::class,
+        'tags' => TagController::class
+    ]);
+    
 });
